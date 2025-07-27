@@ -138,7 +138,10 @@
     </script>
     
     <!-- Load JavaScript files in correct order -->
-    <!-- Core Data -->
+    <!-- WEEKLY SCHEDULE - Load FIRST before data.js -->
+    <script src="js/schedules/week1-schedules.js" onload="trackLoad('week1-schedules.js')" onerror="trackLoad('week1-schedules.js', false)"></script>
+    
+    <!-- Core Data - Load AFTER weekly schedule -->
     <script src="js/data.js" onload="trackLoad('data.js')" onerror="trackLoad('data.js', false)"></script>
     
     <!-- Operations -->
