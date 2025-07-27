@@ -32,23 +32,95 @@ initializeDefaultData() {
                 { name: 'Academic & Career Success', icon: '🎯', color: '#667eea' }
             ],
             assignments: [
-                { 
-                    id: 1, 
-                    subject: 'Bible', 
-                    title: 'Overview of the New Testament', 
-                    link: 'https://www.liberty.edu/online-academy/current-students/', 
-                    completed: false, 
-                    dueDate: '2025-07-28'
-                },
-                { 
-                    id: 2, 
-                    subject: 'Earth Science', 
-                    title: 'Scientific Method Activity', 
-                    link: 'https://www.liberty.edu/online-academy/current-students/', 
-                    completed: false, 
-                    dueDate: '2025-07-28'
-                }
-            ],
+    { 
+        id: 1, 
+        subject: 'Bible', 
+        title: 'Lesson: Overview of the New Testament: Purpose, Authorship, Timeline', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-28'
+    },
+    { 
+        id: 2, 
+        subject: 'Bible', 
+        title: 'Lesson: Overview of the New Testament: The Narrative', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-28'
+    },
+    { 
+        id: 3, 
+        subject: 'Bible', 
+        title: 'Lesson: The Intertestamental Period: The Apocryphal Books', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-29'
+    },
+    { 
+        id: 4, 
+        subject: 'Bible', 
+        title: 'Lesson: Review: Overview of the New Testament and the Intertestamental Period', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-29'
+    },
+    { 
+        id: 5, 
+        subject: 'Bible', 
+        title: 'Quiz: Review: History and Overview of the Bible', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-30'
+    },
+    { 
+        id: 6, 
+        subject: 'Bible', 
+        title: 'Quiz: History and Overview of the Bible', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-30'
+    },
+    { 
+        id: 7, 
+        subject: 'Bible', 
+        title: 'Lesson: Dividing the Scriptures: The Pentateuch (Torah)', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-31'
+    },
+    { 
+        id: 8, 
+        subject: 'Bible', 
+        title: 'Lesson: Dividing the Scriptures: Books of History: Joshua to 2 Samuel', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-07-31'
+    },
+    { 
+        id: 9, 
+        subject: 'Bible', 
+        title: 'Lesson: Dividing the Scriptures: Books of History: 1 Kings to Esther', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-08-01'
+    },
+    { 
+        id: 10, 
+        subject: 'Bible', 
+        title: 'Lesson: Review: The Pentateuch and the Books of History', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-08-01'
+    },
+    { 
+        id: 11, 
+        subject: 'Bible', 
+        title: 'Lesson: Dividing the Scriptures: Books of Poetry and Wisdom', 
+        link: 'https://www.liberty.edu/online-academy/current-students/', 
+        completed: false, 
+        dueDate: '2025-08-01'
+    }
+],
             flashcards: [
                 { id: 1, word: 'Photosynthesis', definition: 'Process by which plants make food using sunlight', subject: 'Earth Science', status: 'unknown' },
                 { id: 2, word: 'Intertestamental', definition: 'Period between Old and New Testament', subject: 'Bible', status: 'unknown' }
