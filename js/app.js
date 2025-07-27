@@ -13,6 +13,16 @@ class RaisingBerriesApp {
     }
 
     /**
+     * Get date as YYYY-MM-DD string in local timezone (not UTC)
+     */
+    getLocalDateString(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    /**
      * Initialize the application
      */
     async init() {
@@ -340,8 +350,8 @@ class RaisingBerriesApp {
         const subjects = student.subjects || [];
         const studentNumber = studentId.slice(-1);
         
-        // Get current selected date as string for comparison
-        const selectedDateString = this.currentDate.toISOString().split('T')[0];
+        // Get current selected date as string for comparison - FIXED
+        const selectedDateString = this.getLocalDateString(this.currentDate);
         const dateString = this.currentDate.toLocaleDateString('en-US', { 
             weekday: 'long', 
             year: 'numeric', 
@@ -349,12 +359,15 @@ class RaisingBerriesApp {
             day: 'numeric' 
         });
         
+        console.log(`🔍 Looking for assignments on: ${selectedDateString} (displaying: ${dateString})`);
+        
         // Calculate progress for each subject
         const subjectTiles = subjects.map(subject => {
             // Get assignments for this subject on the selected date ONLY
-            const todaysSubjectAssignments = student.assignments.filter(a => 
-                a.subject === subject.name && a.dueDate === selectedDateString
-            );
+            const todaysSubjectAssignments = student.assignments.filter(a => {
+                console.log(`📋 Checking assignment: ${a.title} - Due: ${a.dueDate} vs Selected: ${selectedDateString}`);
+                return a.subject === subject.name && a.dueDate === selectedDateString;
+            });
             
             // Count completed assignments for today only
             const todaysCompletedAssignments = todaysSubjectAssignments.filter(a => a.completed);
@@ -366,6 +379,8 @@ class RaisingBerriesApp {
 
             // Count incomplete assignments due today
             const incompleteToday = todaysSubjectAssignments.filter(a => !a.completed);
+            
+            console.log(`📊 ${subject.name}: ${todaysCompletedAssignments.length}/${todaysSubjectAssignments.length} complete, ${incompleteToday.length} due today`);
             
             return `
                 <div class="subject-tile" style="border-color: ${subject.color};" onclick="app.openSubjectModal('${studentId}', '${subject.name}')">
@@ -393,6 +408,9 @@ class RaisingBerriesApp {
                     <button onclick="app.navigateDate(1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600; transition: all 0.3s ease;">
                         Next →
                     </button>
+                </div>
+                <div style="text-align: center; color: rgba(255,255,255,0.8); font-size: 0.9em; margin-top: 5px;">
+                    Looking for assignments due: ${selectedDateString}
                 </div>
             </div>
 
@@ -478,8 +496,8 @@ class RaisingBerriesApp {
         const subjectAssignments = student.assignments.filter(a => a.subject === subjectName);
         const completedCount = subjectAssignments.filter(a => a.completed).length;
         
-        // Filter assignments by current selected date
-        const selectedDateString = this.currentDate.toISOString().split('T')[0];
+        // Filter assignments by current selected date - FIXED
+        const selectedDateString = this.getLocalDateString(this.currentDate);
         const todaysAssignments = subjectAssignments.filter(a => a.dueDate === selectedDateString);
         
         // Create modal
@@ -524,6 +542,9 @@ class RaisingBerriesApp {
                     <div style="text-align: center; font-size: 0.9em; margin-top: 5px; opacity: 0.9;">
                         Overall Progress: ${completedCount}/${subjectAssignments.length} complete
                         ${subjectAssignments.length > 0 ? `(${Math.round((completedCount / subjectAssignments.length) * 100)}%)` : ''}
+                    </div>
+                    <div style="text-align: center; font-size: 0.8em; margin-top: 5px; opacity: 0.7;">
+                        Searching for: ${selectedDateString}
                     </div>
                 </div>
 
@@ -591,7 +612,7 @@ class RaisingBerriesApp {
                 subject: subjectName,
                 title: title.trim(),
                 link: 'https://www.liberty.edu/online-academy/current-students/',
-                dueDate: this.currentDate.toISOString().split('T')[0], // Use current selected date
+                dueDate: this.getLocalDateString(this.currentDate), // Use consistent date formatting
                 completed: false,
                 priority: 'medium'
             };
