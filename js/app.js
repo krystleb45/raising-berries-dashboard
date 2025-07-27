@@ -203,7 +203,7 @@ class RaisingBerriesApp {
     }
 
     /**
-     * Update date displays with navigation
+     * Update date displays - simplified version
      */
     updateDates() {
         const dateString = this.currentDate.toLocaleDateString('en-US', { 
@@ -212,6 +212,8 @@ class RaisingBerriesApp {
             month: 'long', 
             day: 'numeric' 
         });
+        
+        console.log('📅 Current date updated:', dateString);
         
         // Update all date display containers
         document.querySelectorAll('.date-display').forEach(element => {
@@ -352,7 +354,8 @@ class RaisingBerriesApp {
         console.log(`✅ Loaded dashboard for ${student.name} on ${this.currentDate.toLocaleDateString()}`);
     }
 
- /**
+
+/**
      * Generate subject tiles dashboard for any student
      */
     generateSubjectTilesDashboard(student, studentId) {
@@ -361,6 +364,12 @@ class RaisingBerriesApp {
         
         // Get current selected date as string for comparison
         const selectedDateString = this.currentDate.toISOString().split('T')[0];
+        const dateString = this.currentDate.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
         
         // Calculate progress for each subject
         const subjectTiles = subjects.map(subject => {
@@ -390,7 +399,17 @@ class RaisingBerriesApp {
         return `
             <div class="student-header">
                 <h2 class="student-name">${student.name}'s Learning Space</h2>
-                <div class="date-display"></div>
+                <div style="text-align: center; margin: 15px 0;">
+                    <button onclick="app.navigateDate(-1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600;">
+                        ← Previous
+                    </button>
+                    <span style="color: white; margin: 0 15px; font-weight: bold; font-size: 1.1em;">
+                        ${dateString}
+                    </span>
+                    <button onclick="app.navigateDate(1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600;">
+                        Next →
+                    </button>
+                </div>
             </div>
 
             <div class="subjects-grid">
@@ -413,7 +432,6 @@ class RaisingBerriesApp {
             </div>
         `;
     }
-
     /**
      * Load admin panel
      */
