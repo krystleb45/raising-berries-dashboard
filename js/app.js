@@ -195,30 +195,30 @@ class RaisingBerriesApp {
         console.log('📅 Dates updated:', today);
     }
 
-/**
- * Load verse of the week
- */
-loadVerseOfTheWeek() {
-    const verseSection = document.getElementById('verse-section');
-    if (!verseSection) return;
+    /**
+     * Load verse of the week
+     */
+    loadVerseOfTheWeek() {
+        const verseSection = document.getElementById('verse-section');
+        if (!verseSection) return;
 
-    const dm = this.getDataManager();
-    const currentVerse = dm ? dm.getCurrentVerse() : {
-        reference: '2 Timothy 1:7',
-        text: 'For God has not given us a spirit of timidity, but of power and love and discipline.',
-        reflection: 'You have all the power you need, but you have to act like it by believing the word of God and going forward in faith to do His will by His power, not your own.'
-    };
-    
-    verseSection.innerHTML = `
-        <div class="verse-content">
-            <p class="verse-text">"${currentVerse.text}"</p>
-            <span class="verse-reference">- ${currentVerse.reference}</span>
-            <div class="verse-reflection">
-                <p>${currentVerse.reflection}</p>
+        const dm = this.getDataManager();
+        const currentVerse = dm ? dm.getCurrentVerse() : {
+            reference: '2 Timothy 1:7',
+            text: 'For God has not given us a spirit of timidity, but of power and love and discipline.',
+            reflection: 'You have all the power you need, but you have to act like it by believing the word of God and going forward in faith to do His will by His power, not your own.'
+        };
+        
+        verseSection.innerHTML = `
+            <div class="verse-content">
+                <p class="verse-text">"${currentVerse.text}"</p>
+                <span class="verse-reference">- ${currentVerse.reference}</span>
+                <div class="verse-reflection">
+                    <p>${currentVerse.reflection}</p>
+                </div>
             </div>
-        </div>
-    `;
-}
+        `;
+    }
 
     /**
      * Show student dashboard
@@ -328,9 +328,13 @@ loadVerseOfTheWeek() {
                 ? Math.round((completedAssignments.length / subjectAssignments.length) * 100) 
                 : 0;
 
-            // Count today's assignments (assignments due today or overdue)
-            const today = new Date().toISOString().split('T')[0];
-            const todaysAssignments = subjectAssignments.filter(a => a.dueDate <= today && !a.completed);
+            // Count upcoming assignments (assignments due in the next 7 days)
+            const today = new Date();
+            const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+            const upcomingAssignments = subjectAssignments.filter(a => {
+                const dueDate = new Date(a.dueDate);
+                return dueDate >= today && dueDate <= weekFromNow && !a.completed;
+            });
             
             return `
                 <div class="subject-tile" style="border-color: ${subject.color};" onclick="app.openSubjectModal('${studentId}', '${subject.name}')">
@@ -340,7 +344,7 @@ loadVerseOfTheWeek() {
                         <div class="progress-fill" style="width: ${progressPercent}%; background: ${subject.color};"></div>
                     </div>
                     <span class="progress-text">${completedAssignments.length}/${subjectAssignments.length} complete</span>
-                    ${todaysAssignments.length > 0 ? `<div class="today-assignments">📋 ${todaysAssignments.length} due today</div>` : ''}
+                    ${upcomingAssignments.length > 0 ? `<div class="today-assignments">📋 ${upcomingAssignments.length} due this week</div>` : ''}
                 </div>
             `;
         }).join('');
