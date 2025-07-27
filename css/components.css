@@ -1,0 +1,391 @@
+/* ==========================================================================
+   RaisingBerries - Simple Component Styles
+   Clean, functional styling for dashboard elements
+   ========================================================================== */
+
+/* ==========================================================================
+   SUBJECT GRID & TILES
+   ========================================================================== */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 20px 0;
+}
+
+.subject-tile {
+  background: white;
+  border-radius: 15px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.subject-tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-color: #667eea;
+}
+
+/* Subject tile content */
+.subject-name,
+.subject-title {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 10px 0;
+}
+
+.subject-icon {
+  font-size: 3em;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.subject-tile:hover .subject-icon {
+  transform: scale(1.1);
+}
+
+.progress-text {
+  font-size: 0.9em;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  transition: width 0.5s ease;
+}
+
+/* ==========================================================================
+   TOOL CARDS (Flashcards, Notes, Curriculum)
+   ========================================================================== */
+.tools-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.tool-card {
+  background: white !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 15px !important;
+  padding: 25px 20px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 120px !important;
+  text-decoration: none !important;
+}
+
+.tool-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
+  border-color: #667eea !important;
+}
+
+.tool-icon {
+  font-size: 2.5em !important;
+  margin-bottom: 10px !important;
+  transition: transform 0.3s ease !important;
+}
+
+.tool-card:hover .tool-icon {
+  transform: scale(1.1) !important;
+}
+
+.tool-title {
+  font-size: 1.1em !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  margin: 0 !important;
+}
+
+/* Specific tool card colors */
+.tool-card:has(.tool-title:contains("Flashcards")) {
+  border-color: #ef4444 !important;
+}
+
+.tool-card:has(.tool-title:contains("Notes")) {
+  border-color: #3b82f6 !important;
+}
+
+.tool-card:has(.tool-title:contains("Curriculum")) {
+  border-color: #10b981 !important;
+}
+
+/* Alternative targeting for specific tools */
+[onclick*="openFlashcards"] {
+  border-color: #ef4444 !important;
+}
+
+[onclick*="openFlashcards"]:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), white) !important;
+  border-color: #dc2626 !important;
+}
+
+[onclick*="openNotes"] {
+  border-color: #3b82f6 !important;
+}
+
+[onclick*="openNotes"]:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), white) !important;
+  border-color: #2563eb !important;
+}
+
+[onclick*="openCurriculum"] {
+  border-color: #10b981 !important;
+}
+
+[onclick*="openCurriculum"]:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), white) !important;
+  border-color: #059669 !important;
+}
+
+/* ==========================================================================
+   ASSIGNMENT ITEMS
+   ========================================================================== */
+.assignment-item {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.assignment-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: #667eea;
+}
+
+.assignment-title {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 5px;
+}
+
+.assignment-subject {
+  font-size: 0.9em;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #5a6fd8;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8em;
+}
+
+/* ==========================================================================
+   STUDENT HEADERS
+   ========================================================================== */
+.student-header {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 30px 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+}
+
+.student-name {
+  font-size: 2.2em;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.date-display {
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   DASHBOARD GRID
+   ========================================================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.assignments-panel {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.panel-title {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.assignments-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 768px) {
+  .subjects-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  
+  .subject-tile {
+    padding: 20px 15px;
+    min-height: 150px;
+  }
+  
+  .subject-name,
+  .subject-title {
+    font-size: 1.1em;
+  }
+  
+  .subject-icon {
+    font-size: 2.5em;
+  }
+  
+  .tools-panel {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .tool-card {
+    min-height: 100px !important;
+    padding: 20px 15px !important;
+  }
+  
+  .tool-icon {
+    font-size: 2em !important;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .student-header {
+    padding: 25px 15px;
+  }
+  
+  .student-name {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  .subjects-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .subject-tile {
+    padding: 15px 10px;
+    min-height: 130px;
+  }
+  
+  .subject-icon {
+    font-size: 2em;
+  }
+  
+  .tool-card {
+    min-height: 80px !important;
+    padding: 15px 10px !important;
+  }
+  
+  .tool-icon {
+    font-size: 1.8em !important;
+  }
+  
+  .tool-title {
+    font-size: 1em !important;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+.tool-card:focus,
+.subject-tile:focus,
+.btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
