@@ -201,7 +201,25 @@ const WEEK1_SCHEDULES = {
             
             { subject: 'Math', title: 'Lesson: Prime Factorization', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' },
             { subject: 'Math', title: 'Lesson: Test Review - Module 1', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' },
-            { subject: 'Math', title: 'Test Review: Module 1', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' }
+            { subject: 'Math', title: 'Test Review: Module 1', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' },
+
+            // 08/01/25 - Friday
+            { subject: 'Bible', title: 'Lesson: The Case for the Creator - Irreducible Complexity', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Bible', title: 'Lesson Review: The Case for the Creator - Our Unique Planet', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'Science', title: 'Assignment: Creation Project', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Science', title: 'Lesson: Module 1 Test Review', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'History & Geography', title: 'Lesson: Presidential Biography: Rutherford B. Hayes', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'History & Geography', title: 'Lesson Review: Presidents Johnson, Grant, and Hayes', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'History & Geography', title: 'Lesson: The Reconstruction Amendments', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'Language Arts', title: 'Lesson: Punctuation and Capitalization', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Language Arts', title: 'Lesson: Proofreading Marks', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'Math', title: 'Lesson: Prime Factorization', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Math', title: 'Lesson: Test Review - Module 1', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Math', title: 'Test Review: Module 1', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' }
         ],
 
         child3: [ // Noelani - 3rd Grade
@@ -285,9 +303,31 @@ const WEEK1_SCHEDULES = {
             { subject: 'Language Arts', title: 'Assignment: Make a Copy of Module One Review', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' },
             
             { subject: 'Math', title: 'Lesson 3: Ordering Numbers from Least to Greatest', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' },
-            { subject: 'Math', title: 'Assignment: Ordering Numbers', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' }
+            { subject: 'Math', title: 'Assignment: Ordering Numbers', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-07-31' },
 
-            // Note: 08/01/25 - Friday was not included in the provided schedule data for Noelani
+            // 08/01/25 - Friday
+            { subject: 'Bible', title: 'Lesson 3: The Apostles Set Out on the Great Commission', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Bible', title: 'Lesson 4: The Apostles Set Out on the Great Commission Story and Activity', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'Science', title: 'Lesson 3: Create a Simple or Compound Machine', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Science', title: 'Assignment: Create a Simple or Compound Machine', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Science', title: 'Lesson 4: Finding Simple or Compound Machines', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Science', title: 'Assignment: Finding Simple and Compound Machines', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'History & Geography', title: 'Lesson 3: A Secondary Source', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'History & Geography', title: 'Lesson 4: Primary and Secondary Sources Review', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'History & Geography', title: 'Assignment: Autobiography', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'Language Arts', title: 'Lesson 3: Identifying the Resolution', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Language Arts', title: 'Assignment: Module 1 Review', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Language Arts', title: 'Lesson 4: Module One Review', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Language Arts', title: 'Assignment: Final Copy of A Favorite Place', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            
+            { subject: 'Math', title: 'Lesson 3: Ordering Numbers from Least to Greatest', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Math', title: 'Assignment: Comparing and Ordering Numbers', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' },
+            { subject: 'Math', title: 'Lesson 4: Ordering Numbers', link: 'https://www.liberty.edu/online-academy/current-students/', dueDate: '2025-08-01' }
+
+            // Note: Noelani now has a complete 5-day schedule like Elijah
         ]
     }
 };
