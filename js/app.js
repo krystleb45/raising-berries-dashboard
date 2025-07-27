@@ -213,18 +213,18 @@ class RaisingBerriesApp {
             day: 'numeric' 
         });
         
-        // Update all date elements with navigation
-        document.querySelectorAll('#date1, #date2, #date3, .date-display span').forEach(element => {
+        // Update all date display containers
+        document.querySelectorAll('.date-display').forEach(element => {
             if (element) {
                 element.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-                        <button onclick="app.navigateDate(-1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.1em;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <button onclick="app.navigateDate(-1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600;">
                             ← Previous
                         </button>
-                        <span style="font-weight: 600; min-width: 200px; text-align: center;">
+                        <span style="font-weight: 600; min-width: 200px; text-align: center; color: white;">
                             ${dateString}
                         </span>
-                        <button onclick="app.navigateDate(1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.1em;">
+                        <button onclick="app.navigateDate(1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600;">
                             Next →
                         </button>
                     </div>
@@ -352,7 +352,7 @@ class RaisingBerriesApp {
         console.log(`✅ Loaded dashboard for ${student.name} on ${this.currentDate.toLocaleDateString()}`);
     }
 
-    /**
+ /**
      * Generate subject tiles dashboard for any student
      */
     generateSubjectTilesDashboard(student, studentId) {
@@ -390,7 +390,7 @@ class RaisingBerriesApp {
         return `
             <div class="student-header">
                 <h2 class="student-name">${student.name}'s Learning Space</h2>
-                <p class="date-display"><span id="date${studentNumber}"></span></p>
+                <div class="date-display"></div>
             </div>
 
             <div class="subjects-grid">
