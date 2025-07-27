@@ -1,5 +1,5 @@
 /**
- * RaisingBerries - Simple Application Logic
+ * RaisingBerries - Simple Application Logic with Date Navigation
  * Clean, functional dashboard for homeschool management
  * File: js/app.js
  */
@@ -8,6 +8,7 @@ class RaisingBerriesApp {
     constructor() {
         this.currentStudent = 'child1';
         this.loadedModules = new Set();
+        this.currentDate = new Date(); // Track the currently selected date
         this.init();
     }
 
@@ -169,30 +170,69 @@ class RaisingBerriesApp {
                     modal.classList.remove('active');
                 });
             }
+
+            // Arrow keys for date navigation
+            if (event.key === 'ArrowLeft') {
+                this.navigateDate(-1);
+            }
+            if (event.key === 'ArrowRight') {
+                this.navigateDate(1);
+            }
         });
 
         console.log('🎧 Event listeners ready');
     }
 
     /**
-     * Update date displays
+     * Navigate to previous/next day
+     */
+    navigateDate(direction) {
+        const newDate = new Date(this.currentDate);
+        newDate.setDate(newDate.getDate() + direction);
+        this.currentDate = newDate;
+        
+        // Update the display
+        this.updateDates();
+        
+        // Refresh current student dashboard to show assignments for new date
+        if (this.currentStudent && this.currentStudent !== 'admin') {
+            this.loadStudentDashboard(this.currentStudent);
+        }
+        
+        console.log(`📅 Navigated to: ${this.currentDate.toLocaleDateString()}`);
+    }
+
+    /**
+     * Update date displays with navigation
      */
     updateDates() {
-        const today = new Date().toLocaleDateString('en-US', { 
+        const dateString = this.currentDate.toLocaleDateString('en-US', { 
             weekday: 'long', 
             year: 'numeric', 
             month: 'long', 
             day: 'numeric' 
         });
         
-        // Update all date elements
+        // Update all date elements with navigation
         document.querySelectorAll('#date1, #date2, #date3, .date-display span').forEach(element => {
             if (element) {
-                element.textContent = today;
+                element.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                        <button onclick="app.navigateDate(-1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.1em;">
+                            ← Previous
+                        </button>
+                        <span style="font-weight: 600; min-width: 200px; text-align: center;">
+                            ${dateString}
+                        </span>
+                        <button onclick="app.navigateDate(1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.1em;">
+                            Next →
+                        </button>
+                    </div>
+                `;
             }
         });
         
-        console.log('📅 Dates updated:', today);
+        console.log('📅 Dates updated with navigation:', dateString);
     }
 
     /**
@@ -307,9 +347,9 @@ class RaisingBerriesApp {
             return;
         }
 
-        // Generate subject tiles dashboard for ALL students
+        // Generate subject tiles dashboard for the selected date
         page.innerHTML = this.generateSubjectTilesDashboard(student, studentId);
-        console.log(`✅ Loaded dashboard for ${student.name}`);
+        console.log(`✅ Loaded dashboard for ${student.name} on ${this.currentDate.toLocaleDateString()}`);
     }
 
     /**
@@ -318,6 +358,9 @@ class RaisingBerriesApp {
     generateSubjectTilesDashboard(student, studentId) {
         const subjects = student.subjects || [];
         const studentNumber = studentId.slice(-1);
+        
+        // Get current selected date as string for comparison
+        const selectedDateString = this.currentDate.toISOString().split('T')[0];
         
         // Calculate progress for each subject
         const subjectTiles = subjects.map(subject => {
@@ -328,13 +371,8 @@ class RaisingBerriesApp {
                 ? Math.round((completedAssignments.length / subjectAssignments.length) * 100) 
                 : 0;
 
-            // Count upcoming assignments (assignments due in the next 7 days)
-            const today = new Date();
-            const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-            const upcomingAssignments = subjectAssignments.filter(a => {
-                const dueDate = new Date(a.dueDate);
-                return dueDate >= today && dueDate <= weekFromNow && !a.completed;
-            });
+            // Count assignments due on the selected date
+            const todaysAssignments = subjectAssignments.filter(a => a.dueDate === selectedDateString && !a.completed);
             
             return `
                 <div class="subject-tile" style="border-color: ${subject.color};" onclick="app.openSubjectModal('${studentId}', '${subject.name}')">
@@ -344,7 +382,7 @@ class RaisingBerriesApp {
                         <div class="progress-fill" style="width: ${progressPercent}%; background: ${subject.color};"></div>
                     </div>
                     <span class="progress-text">${completedAssignments.length}/${subjectAssignments.length} complete</span>
-                    ${upcomingAssignments.length > 0 ? `<div class="today-assignments">📋 ${upcomingAssignments.length} due this week</div>` : ''}
+                    ${todaysAssignments.length > 0 ? `<div class="today-assignments">📋 ${todaysAssignments.length} due today</div>` : ''}
                 </div>
             `;
         }).join('');
@@ -352,7 +390,7 @@ class RaisingBerriesApp {
         return `
             <div class="student-header">
                 <h2 class="student-name">${student.name}'s Learning Space</h2>
-                <p class="date-display">Today: <span id="date${studentNumber}"></span></p>
+                <p class="date-display"><span id="date${studentNumber}"></span></p>
             </div>
 
             <div class="subjects-grid">
@@ -415,7 +453,7 @@ class RaisingBerriesApp {
     }
 
     /**
-     * Open subject modal with assignments
+     * Open subject modal with assignments (filtered by current date)
      */
     openSubjectModal(studentId, subjectName) {
         const dm = this.getDataManager();
@@ -437,6 +475,10 @@ class RaisingBerriesApp {
         const subjectAssignments = student.assignments.filter(a => a.subject === subjectName);
         const completedCount = subjectAssignments.filter(a => a.completed).length;
         
+        // Filter assignments by current selected date
+        const selectedDateString = this.currentDate.toISOString().split('T')[0];
+        const todaysAssignments = subjectAssignments.filter(a => a.dueDate === selectedDateString);
+        
         // Create modal
         const modal = document.createElement('div');
         modal.className = 'modal';
@@ -446,8 +488,8 @@ class RaisingBerriesApp {
             }
         };
 
-        const assignmentsList = subjectAssignments.length > 0 
-            ? subjectAssignments.map(assignment => `
+        const assignmentsList = todaysAssignments.length > 0 
+            ? todaysAssignments.map(assignment => `
                 <div class="assignment-item" style="border-left-color: ${subject.color};">
                     <div class="assignment-header">
                         <div class="assignment-content">
@@ -464,7 +506,7 @@ class RaisingBerriesApp {
                     </div>
                 </div>
             `).join('')
-            : '<div class="no-assignments">📚 No assignments yet for this subject.<br><small>Use the Admin panel to add assignments.</small></div>';
+            : `<div class="no-assignments">📚 No assignments due on ${this.currentDate.toLocaleDateString()}.<br><small>Use the date navigation arrows to see other days.</small></div>`;
 
         modal.innerHTML = `
             <div class="modal-content" style="max-width: 600px; max-height: 85vh; overflow: visible;">
@@ -474,17 +516,17 @@ class RaisingBerriesApp {
                     <div class="subject-modal-icon" style="font-size: 2.5em; text-align: center; margin-bottom: 8px;">${subject.icon}</div>
                     <h2 style="text-align: center; margin-bottom: 8px; font-size: 1.6em;">${student.name}'s ${subjectName}</h2>
                     <div style="text-align: center; font-size: 1em;">
-                        ${completedCount}/${subjectAssignments.length} assignments completed
+                        ${this.currentDate.toLocaleDateString()} - ${todaysAssignments.length} assignment${todaysAssignments.length !== 1 ? 's' : ''} due
+                    </div>
+                    <div style="text-align: center; font-size: 0.9em; margin-top: 5px; opacity: 0.9;">
+                        Overall Progress: ${completedCount}/${subjectAssignments.length} complete
                         ${subjectAssignments.length > 0 ? `(${Math.round((completedCount / subjectAssignments.length) * 100)}%)` : ''}
                     </div>
                 </div>
 
                 <div class="assignments-section">
                     <h3 style="color: #2d3436; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.2em;">
-                        📋 Assignments
-                        ${subjectAssignments.filter(a => !a.completed && a.dueDate <= new Date().toISOString().split('T')[0]).length > 0 
-                            ? `<span class="due-today-badge">${subjectAssignments.filter(a => !a.completed && a.dueDate <= new Date().toISOString().split('T')[0]).length} due today</span>` 
-                            : ''}
+                        📋 Assignments for ${this.currentDate.toLocaleDateString()}
                     </h3>
                     <div class="assignments-list" style="max-height: 300px; overflow-y: auto; padding-right: 5px;">
                         ${assignmentsList}
@@ -508,7 +550,7 @@ class RaisingBerriesApp {
         document.body.appendChild(modal);
         modal.classList.add('active');
         
-        console.log(`📚 Opened ${subjectName} modal for ${student.name}`);
+        console.log(`📚 Opened ${subjectName} modal for ${student.name} on ${this.currentDate.toLocaleDateString()}`);
     }
 
     /**
@@ -546,7 +588,7 @@ class RaisingBerriesApp {
                 subject: subjectName,
                 title: title.trim(),
                 link: 'https://www.liberty.edu/online-academy/current-students/',
-                dueDate: new Date().toISOString().split('T')[0],
+                dueDate: this.currentDate.toISOString().split('T')[0], // Use current selected date
                 completed: false,
                 priority: 'medium'
             };
