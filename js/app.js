@@ -1,5 +1,5 @@
 /**
- * RaisingBerries - Simple Application Logic with Date Navigation
+ * RaisingBerries - Simple Application Logic with Date Navigation - FIXED
  * Clean, functional dashboard for homeschool management
  * File: js/app.js
  */
@@ -29,6 +29,18 @@ class RaisingBerriesApp {
         // Parse as local date, not UTC
         const [year, month, day] = dateString.split('-').map(Number);
         return new Date(year, month - 1, day); // month is 0-indexed
+    }
+
+    /**
+     * Format date for display (avoid timezone issues)
+     */
+    formatDateForDisplay(dateString) {
+        const date = this.parseLocalDate(dateString);
+        return date.toLocaleDateString('en-US', {
+            month: 'numeric',
+            day: 'numeric', 
+            year: 'numeric'
+        });
     }
 
     /**
@@ -509,6 +521,9 @@ class RaisingBerriesApp {
         const selectedDateString = this.getLocalDateString(this.currentDate);
         const todaysAssignments = subjectAssignments.filter(a => a.dueDate === selectedDateString);
         
+        console.log(`🔍 Modal filtering: Looking for ${subjectName} assignments on ${selectedDateString}`);
+        console.log(`🔍 Found ${todaysAssignments.length} assignments for today:`, todaysAssignments);
+        
         // Create modal
         const modal = document.createElement('div');
         modal.className = 'modal';
@@ -520,8 +535,10 @@ class RaisingBerriesApp {
 
         const assignmentsList = todaysAssignments.length > 0 
             ? todaysAssignments.map(assignment => {
-                // Fix the date display - parse assignment date correctly to avoid timezone issues
-                const assignmentDate = this.parseLocalDate(assignment.dueDate);
+                // Use the new formatDateForDisplay method to show dates correctly
+                const formattedDueDate = this.formatDateForDisplay(assignment.dueDate);
+                
+                console.log(`📋 Assignment: ${assignment.title}, Due: ${assignment.dueDate}, Formatted: ${formattedDueDate}`);
                 
                 return `
                 <div class="assignment-item" style="border-left-color: ${subject.color};">
@@ -529,7 +546,7 @@ class RaisingBerriesApp {
                         <div class="assignment-content">
                             <div class="assignment-title">${assignment.title}</div>
                             <div class="assignment-meta">
-                                <span class="assignment-due">Due: ${assignmentDate.toLocaleDateString()}</span>
+                                <span class="assignment-due">Due: ${formattedDueDate}</span>
                                 ${assignment.link ? `<a href="${assignment.link}" target="_blank" class="assignment-link">📖 View Assignment</a>` : ''}
                             </div>
                         </div>
