@@ -191,15 +191,12 @@ class RaisingBerriesApp {
         newDate.setDate(newDate.getDate() + direction);
         this.currentDate = newDate;
         
-        // Update the display
-        this.updateDates();
+        console.log(`📅 Navigated to: ${this.currentDate.toLocaleDateString()}`);
         
         // Refresh current student dashboard to show assignments for new date
         if (this.currentStudent && this.currentStudent !== 'admin') {
             this.loadStudentDashboard(this.currentStudent);
         }
-        
-        console.log(`📅 Navigated to: ${this.currentDate.toLocaleDateString()}`);
     }
 
     /**
@@ -215,26 +212,8 @@ class RaisingBerriesApp {
         
         console.log('📅 Current date updated:', dateString);
         
-        // Update all date display containers
-        document.querySelectorAll('.date-display').forEach(element => {
-            if (element) {
-                element.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                        <button onclick="app.navigateDate(-1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600;">
-                            ← Previous
-                        </button>
-                        <span style="font-weight: 600; min-width: 200px; text-align: center; color: white;">
-                            ${dateString}
-                        </span>
-                        <button onclick="app.navigateDate(1)" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600;">
-                            Next →
-                        </button>
-                    </div>
-                `;
-            }
-        });
-        
-        console.log('📅 Dates updated with navigation:', dateString);
+        // The date display is now handled directly in generateSubjectTilesDashboard
+        // This function just logs for debugging
     }
 
     /**
@@ -354,8 +333,7 @@ class RaisingBerriesApp {
         console.log(`✅ Loaded dashboard for ${student.name} on ${this.currentDate.toLocaleDateString()}`);
     }
 
-
-/**
+    /**
      * Generate subject tiles dashboard for any student
      */
     generateSubjectTilesDashboard(student, studentId) {
@@ -373,15 +351,21 @@ class RaisingBerriesApp {
         
         // Calculate progress for each subject
         const subjectTiles = subjects.map(subject => {
-            // Count assignments for this subject
-            const subjectAssignments = student.assignments.filter(a => a.subject === subject.name);
-            const completedAssignments = subjectAssignments.filter(a => a.completed);
-            const progressPercent = subjectAssignments.length > 0 
-                ? Math.round((completedAssignments.length / subjectAssignments.length) * 100) 
+            // Get assignments for this subject on the selected date ONLY
+            const todaysSubjectAssignments = student.assignments.filter(a => 
+                a.subject === subject.name && a.dueDate === selectedDateString
+            );
+            
+            // Count completed assignments for today only
+            const todaysCompletedAssignments = todaysSubjectAssignments.filter(a => a.completed);
+            
+            // Calculate progress based on today's assignments only
+            const progressPercent = todaysSubjectAssignments.length > 0 
+                ? Math.round((todaysCompletedAssignments.length / todaysSubjectAssignments.length) * 100) 
                 : 0;
 
-            // Count assignments due on the selected date
-            const todaysAssignments = subjectAssignments.filter(a => a.dueDate === selectedDateString && !a.completed);
+            // Count incomplete assignments due today
+            const incompleteToday = todaysSubjectAssignments.filter(a => !a.completed);
             
             return `
                 <div class="subject-tile" style="border-color: ${subject.color};" onclick="app.openSubjectModal('${studentId}', '${subject.name}')">
@@ -390,8 +374,8 @@ class RaisingBerriesApp {
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${progressPercent}%; background: ${subject.color};"></div>
                     </div>
-                    <span class="progress-text">${completedAssignments.length}/${subjectAssignments.length} complete</span>
-                    ${todaysAssignments.length > 0 ? `<div class="today-assignments">📋 ${todaysAssignments.length} due today</div>` : ''}
+                    <span class="progress-text">${todaysCompletedAssignments.length}/${todaysSubjectAssignments.length} complete today</span>
+                    ${incompleteToday.length > 0 ? `<div class="today-assignments">📋 ${incompleteToday.length} due today</div>` : ''}
                 </div>
             `;
         }).join('');
@@ -399,14 +383,14 @@ class RaisingBerriesApp {
         return `
             <div class="student-header">
                 <h2 class="student-name">${student.name}'s Learning Space</h2>
-                <div style="text-align: center; margin: 15px 0;">
-                    <button onclick="app.navigateDate(-1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600;">
+                <div class="date-navigation" style="text-align: center; margin: 15px 0;">
+                    <button onclick="app.navigateDate(-1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600; transition: all 0.3s ease;">
                         ← Previous
                     </button>
                     <span style="color: white; margin: 0 15px; font-weight: bold; font-size: 1.1em;">
                         ${dateString}
                     </span>
-                    <button onclick="app.navigateDate(1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600;">
+                    <button onclick="app.navigateDate(1)" style="background: rgba(255, 255, 255, 0.3); border: none; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; margin: 5px; font-weight: 600; transition: all 0.3s ease;">
                         Next →
                     </button>
                 </div>
@@ -432,6 +416,7 @@ class RaisingBerriesApp {
             </div>
         `;
     }
+
     /**
      * Load admin panel
      */
