@@ -1,5 +1,6 @@
 /**
  * RaisingBerries - Data Management with Weekly Schedule Integration
+ * Replace your current data.js with this file
  * File: js/data.js
  */
 
@@ -49,7 +50,7 @@ class DataManager {
                     { name: 'Bible', icon: '📖', color: '#8b5cf6' },
                     { name: 'Math', icon: '🔢', color: '#ea580c' },
                     { name: 'Science', icon: '🔬', color: '#059669' },
-                    { name: 'History', icon: '🏛️', color: '#dc2626' },
+                    { name: 'History & Geography', icon: '🏛️', color: '#dc2626' },
                     { name: 'Language Arts', icon: '📝', color: '#2563eb' }
                 ],
                 assignments: [], // Will be loaded from weekly schedule
@@ -69,7 +70,7 @@ class DataManager {
                     { name: 'Bible', icon: '📖', color: '#8b5cf6' },
                     { name: 'Math', icon: '🔢', color: '#ea580c' },
                     { name: 'Science', icon: '🔬', color: '#059669' },
-                    { name: 'History', icon: '🏛️', color: '#dc2626' },
+                    { name: 'History & Geography', icon: '🏛️', color: '#dc2626' },
                     { name: 'Language Arts', icon: '📝', color: '#2563eb' }
                 ],
                 assignments: [], // Will be loaded from weekly schedule
@@ -123,6 +124,9 @@ class DataManager {
                     console.log(`✅ Loaded ${processedAssignments.length} assignments for ${this.studentsData[studentId].name}`);
                 }
             });
+
+            // Apply any saved completion status
+            this.applySavedCompletions();
 
             return true;
         } catch (error) {
@@ -190,8 +194,6 @@ class DataManager {
         console.log(`🔄 Switched to ${weekIdentifier}`);
     }
 
-    // ... rest of your existing DataManager methods remain the same ...
-    
     /**
      * Check if ready
      */
@@ -214,6 +216,45 @@ class DataManager {
     }
 
     /**
+     * Add assignment to student
+     */
+    addAssignment(studentId, assignment) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        // Generate new ID
+        const maxId = Math.max(0, ...student.assignments.map(a => a.id));
+        assignment.id = maxId + 1;
+        assignment.completed = false;
+        
+        student.assignments.push(assignment);
+        this.saveData();
+        console.log(`✅ Added assignment "${assignment.title}" to ${student.name}`);
+        return true;
+    }
+
+    /**
+     * Add weekly assignments
+     */
+    addWeeklyAssignments(studentId, assignments) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        let maxId = Math.max(0, ...student.assignments.map(a => a.id));
+        
+        assignments.forEach(assignment => {
+            maxId++;
+            assignment.id = maxId;
+            assignment.completed = false;
+            student.assignments.push(assignment);
+        });
+
+        this.saveData();
+        console.log(`✅ Added ${assignments.length} weekly assignments to ${student.name}`);
+        return true;
+    }
+
+    /**
      * Toggle assignment completion
      */
     toggleAssignment(studentId, assignmentId) {
@@ -230,10 +271,156 @@ class DataManager {
     }
 
     /**
+     * Add flashcard
+     */
+    addFlashcard(studentId, flashcard) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        const maxId = Math.max(0, ...student.flashcards.map(f => f.id));
+        flashcard.id = maxId + 1;
+        flashcard.status = flashcard.status || 'unknown';
+        flashcard.created = flashcard.created || new Date().toISOString();
+        
+        student.flashcards.push(flashcard);
+        this.saveData();
+        console.log(`✅ Added flashcard "${flashcard.word}" to ${student.name}`);
+        return true;
+    }
+
+    /**
+     * Update flashcard
+     */
+    updateFlashcard(studentId, flashcard) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        const index = student.flashcards.findIndex(f => f.id === flashcard.id);
+        if (index === -1) return false;
+
+        student.flashcards[index] = { ...student.flashcards[index], ...flashcard };
+        this.saveData();
+        return true;
+    }
+
+    /**
+     * Delete flashcard
+     */
+    deleteFlashcard(studentId, flashcardId) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        const index = student.flashcards.findIndex(f => f.id === flashcardId);
+        if (index === -1) return false;
+
+        student.flashcards.splice(index, 1);
+        this.saveData();
+        return true;
+    }
+
+    /**
+     * Add note
+     */
+    addNote(studentId, note) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        const maxId = Math.max(0, ...student.notes.map(n => n.id));
+        note.id = maxId + 1;
+        note.created = note.created || new Date().toISOString();
+        note.updated = new Date().toISOString();
+        
+        student.notes.push(note);
+        this.saveData();
+        console.log(`✅ Added note "${note.title}" to ${student.name}`);
+        return true;
+    }
+
+    /**
+     * Update note
+     */
+    updateNote(studentId, note) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        const index = student.notes.findIndex(n => n.id === note.id);
+        if (index === -1) return false;
+
+        note.updated = new Date().toISOString();
+        student.notes[index] = { ...student.notes[index], ...note };
+        this.saveData();
+        return true;
+    }
+
+    /**
+     * Delete note
+     */
+    deleteNote(studentId, noteId) {
+        const student = this.studentsData[studentId];
+        if (!student) return false;
+
+        const index = student.notes.findIndex(n => n.id === noteId);
+        if (index === -1) return false;
+
+        student.notes.splice(index, 1);
+        this.saveData();
+        return true;
+    }
+
+    /**
      * Get current verse
      */
     getCurrentVerse() {
         return this.currentVerse;
+    }
+
+    /**
+     * Get assignments for this week
+     */
+    getWeekAssignments(studentId) {
+        const student = this.studentsData[studentId];
+        if (!student) return [];
+
+        const today = new Date();
+        const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+        
+        return student.assignments.filter(a => {
+            const dueDate = new Date(a.dueDate);
+            return dueDate >= today && dueDate <= weekFromNow;
+        });
+    }
+
+    /**
+     * Get analytics
+     */
+    getAnalytics() {
+        const analytics = {
+            completedAssignments: 0,
+            totalAssignments: 0,
+            overallProgress: 0,
+            students: {}
+        };
+
+        Object.entries(this.studentsData).forEach(([studentId, student]) => {
+            const completed = student.assignments.filter(a => a.completed).length;
+            const total = student.assignments.length;
+            
+            analytics.completedAssignments += completed;
+            analytics.totalAssignments += total;
+            
+            analytics.students[studentId] = {
+                name: student.name,
+                progress: total > 0 ? Math.round((completed / total) * 100) : 0,
+                completed,
+                total
+            };
+        });
+
+        analytics.overallProgress = analytics.totalAssignments > 0 
+            ? Math.round((analytics.completedAssignments / analytics.totalAssignments) * 100) 
+            : 0;
+
+        return analytics;
     }
 
     /**
@@ -338,7 +525,60 @@ class DataManager {
         this.savedCompletions = null; // Clear after applying
     }
 
-    // ... include all your other existing methods (addFlashcard, addNote, etc.) ...
+    /**
+     * Clear all data (for testing)
+     */
+    clearData() {
+        localStorage.removeItem('raisingberries_data');
+        this.initializeDefaultData();
+        this.loadWeeklySchedule();
+        console.log('🗑️ Data cleared and reset to defaults');
+    }
+
+    /**
+     * Export data
+     */
+    exportAll() {
+        const data = {
+            students: this.studentsData,
+            verse: this.currentVerse,
+            exportDate: new Date().toISOString()
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `raisingberries_backup_${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+        console.log('📤 Data exported');
+    }
+
+    /**
+     * Import data
+     */
+    importData(jsonData) {
+        try {
+            const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+            
+            if (data.students) {
+                this.studentsData = data.students;
+            }
+            if (data.verse) {
+                this.currentVerse = data.verse;
+            }
+            
+            this.saveData();
+            console.log('📥 Data imported successfully');
+            return true;
+        } catch (error) {
+            console.error('❌ Import error:', error);
+            return false;
+        }
+    }
 }
 
 // Create and initialize
