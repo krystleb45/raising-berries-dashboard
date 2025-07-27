@@ -23,6 +23,15 @@ class RaisingBerriesApp {
     }
 
     /**
+     * Parse a YYYY-MM-DD date string as local date (not UTC)
+     */
+    parseLocalDate(dateString) {
+        // Parse as local date, not UTC
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day); // month is 0-indexed
+    }
+
+    /**
      * Initialize the application
      */
     async init() {
@@ -510,13 +519,17 @@ class RaisingBerriesApp {
         };
 
         const assignmentsList = todaysAssignments.length > 0 
-            ? todaysAssignments.map(assignment => `
+            ? todaysAssignments.map(assignment => {
+                // Fix the date display - parse assignment date correctly to avoid timezone issues
+                const assignmentDate = this.parseLocalDate(assignment.dueDate);
+                
+                return `
                 <div class="assignment-item" style="border-left-color: ${subject.color};">
                     <div class="assignment-header">
                         <div class="assignment-content">
                             <div class="assignment-title">${assignment.title}</div>
                             <div class="assignment-meta">
-                                <span class="assignment-due">Due: ${new Date(assignment.dueDate).toLocaleDateString()}</span>
+                                <span class="assignment-due">Due: ${assignmentDate.toLocaleDateString()}</span>
                                 ${assignment.link ? `<a href="${assignment.link}" target="_blank" class="assignment-link">📖 View Assignment</a>` : ''}
                             </div>
                         </div>
@@ -526,7 +539,7 @@ class RaisingBerriesApp {
                         </button>
                     </div>
                 </div>
-            `).join('')
+            `}).join('')
             : `<div class="no-assignments">📚 No assignments due on ${this.currentDate.toLocaleDateString()}.<br><small>Use the date navigation arrows to see other days.</small></div>`;
 
         modal.innerHTML = `
