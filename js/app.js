@@ -35,12 +35,10 @@ class RaisingBerriesApp {
      * Format date for display (avoid timezone issues)
      */
     formatDateForDisplay(dateString) {
-        const date = this.parseLocalDate(dateString);
-        return date.toLocaleDateString('en-US', {
-            month: 'numeric',
-            day: 'numeric', 
-            year: 'numeric'
-        });
+        // Simply reformat the YYYY-MM-DD string to M/D/YYYY without any Date object conversion
+        // This avoids all timezone issues
+        const [year, month, day] = dateString.split('-');
+        return `${parseInt(month)}/${parseInt(day)}/${year}`;
     }
 
     /**
